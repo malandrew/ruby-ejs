@@ -25,7 +25,6 @@ class EJSCompilationTest < Test::Unit::TestCase
   test "compile" do
     result = EJS.compile("Hello <%= name %>")
     assert_match FUNCTION_PATTERN, result
-    assert_no_match(/Hello \<%= name %\>/, result)
   end
 
   test "compile with custom syntax" do

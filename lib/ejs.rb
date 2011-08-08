@@ -22,7 +22,6 @@ module EJS
     def compile(source, options = {})
       source = source.dup
 
-      replace_interpolation_tags!(source, options)
       replace_evaluation_tags!(source, options)
       escape_quotes!(source)
       escape_whitespace!(source)
@@ -55,12 +54,6 @@ module EJS
       def replace_evaluation_tags!(source, options)
         source.gsub!(options[:evaluation_pattern] || evaluation_pattern) do
           "<%" + $1.gsub(/\\'/, "'").gsub(/[\r\n\t]/, ' ') + "%>"
-        end
-      end
-
-      def replace_interpolation_tags!(source, options)
-        source.gsub!(options[:interpolation_pattern] || interpolation_pattern) do
-          "<%= " + $1.gsub(/\\'/, "'") + " %>"
         end
       end
 
