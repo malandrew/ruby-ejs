@@ -1,7 +1,7 @@
 require "ejs"
 require "test/unit"
 
-FUNCTION_PATTERN = /^function\s*\(.*?\)\s*\{(.*?)\}$/
+FUNCTION_PATTERN = /^require\('ejs'\).compile\('(.*?)'\)$/ 
 
 BRACE_SYNTAX = {
   :evaluation_pattern    => /\{\{([\s\S]+?)\}\}/,

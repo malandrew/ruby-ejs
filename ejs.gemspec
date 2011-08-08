@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.summary = "EJS (Embedded JavaScript) template compiler"
   s.description = "Compile and evaluate EJS (Embedded JavaScript) templates from Ruby."
 
-  s.files = Dir["README.md", "LICENSE", "lib/**/*.rb"]
+  s.files = Dir["README.md", "LICENSE", "lib/**/*.rb","lib/**/*.js"]
 
   s.add_development_dependency "execjs", "~> 0.4"
 

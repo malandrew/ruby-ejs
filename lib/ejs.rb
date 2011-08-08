@@ -22,13 +22,12 @@ module EJS
     def compile(source, options = {})
       source = source.dup
 
-      escape_quotes!(source)
       replace_interpolation_tags!(source, options)
       replace_evaluation_tags!(source, options)
+      escape_quotes!(source)
       escape_whitespace!(source)
 
-      "function(obj){var __p=[],print=function(){__p.push.apply(__p,arguments);};" +
-        "with(obj||{}){__p.push('#{source}');}return __p.join('');}"
+      "require('ejs').compile('#{source}')"
     end
 
     # Evaluates an EJS template with the given local variables and
@@ -41,7 +40,9 @@ module EJS
     #
     def evaluate(template, locals = {}, options = {})
       require "execjs"
-      context = ExecJS.compile("var evaluate = #{compile(template, options)}")
+      code = File.read(File.join(File.dirname(__FILE__),'ejs.js'))
+      code += "\n\nvar evaluate = #{compile(template, options)}"
+      context = ExecJS.compile(code)
       context.call("evaluate", locals)
     end
 
@@ -53,13 +54,13 @@ module EJS
 
       def replace_evaluation_tags!(source, options)
         source.gsub!(options[:evaluation_pattern] || evaluation_pattern) do
-          "');" + $1.gsub(/\\'/, "'").gsub(/[\r\n\t]/, ' ') + "__p.push('"
+          "<%" + $1.gsub(/\\'/, "'").gsub(/[\r\n\t]/, ' ') + "%>"
         end
       end
 
       def replace_interpolation_tags!(source, options)
         source.gsub!(options[:interpolation_pattern] || interpolation_pattern) do
-          "'," + $1.gsub(/\\'/, "'") + ",'"
+          "<%= " + $1.gsub(/\\'/, "'") + " %>"
         end
       end
 
