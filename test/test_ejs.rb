@@ -143,4 +143,15 @@ class EJSEvaluationTest < Test::Unit::TestCase
     template = "<? if(foo == 'bar'){ ?>Statement quotes and 'quotes'.<? } ?>"
     assert_equal "Statement quotes and 'quotes'.", EJS.evaluate(template, { :foo => "bar" }, QUESTION_MARK_SYNTAX)
   end
+
+  test "Escapes html by default with <%= code %>" do
+    template = "<%= xss %>"
+    assert_equal "&lt;IMG SRC=&quot;javascript:alert('XSS');&quot;&gt;", EJS.evaluate(template, { :xss => %Q{<IMG SRC="javascript:alert('XSS');">} })
+  end
+
+  test "Unescaped buffering with <%- code %>" do
+    template = "<%- xss %>"
+    assert_equal %Q{<IMG SRC="javascript:alert('XSS');">}, EJS.evaluate(template, { :xss => %Q{<IMG SRC="javascript:alert('XSS');">} })
+  end
+
 end
