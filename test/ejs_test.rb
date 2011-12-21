@@ -1,4 +1,5 @@
-require "ejs"
+require 'ejs/tilt_ejs'
+require 'ejs/ejs'
 require "test/unit"
 
 FUNCTION_PATTERN = /^require\('ejs'\).compile\('(.*?)'\)$/ 
